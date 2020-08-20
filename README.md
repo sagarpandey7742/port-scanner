@@ -17,6 +17,5 @@ cd isaa_proj
 ```
 * Run the following command
 ```shell
-chmod +x setup.sh
 ./setup.sh
 ```
