@@ -1,5 +1,7 @@
 # isaa_proj
 
+> Root Privilages needed.
+
 ### Pre-requisites:
 * Python 3.x
 * Root Privilages
