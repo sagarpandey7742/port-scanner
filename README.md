@@ -17,5 +17,6 @@ cd isaa_proj
 ```
 * Run the following command
 ```shell
+sudo apt update
 ./setup.sh
 ```
