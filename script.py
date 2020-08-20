@@ -9,7 +9,7 @@ getLogger("scapy.runtime").setLevel(ERROR)
 SYN_ACK = 0x12
 RST_ACK = 0x14
 
-verbose = 1
+verbose = 0
 
 if len(sys.argv) > 1 and sys.argv[1] == 'v':
     verbose = 1

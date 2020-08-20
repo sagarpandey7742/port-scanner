@@ -26,7 +26,11 @@
             </div>
         </form>
 
-        <div id="scanResult"></div>
+        <div class="ia-form">
+            <ul class="list-group list-group-flush" id="scanResult">
+
+            </ul>
+        </div>
     {% endif %}
 
     <script type="text/javascript">
@@ -34,13 +38,25 @@
         const xhttp = new XMLHttpRequest();
 
         xhttp.onreadystatechange = function () {
-            console.log(this.response);
+            const res = JSON.parse(this.responseText);
+            const scanResult = document.getElementById('scanResult');
+
+            for (var i = 0;
+                 i < res.length;
+                 i++
+            ) {
+                const li = document.createElement('li');
+                li.classList.add("list-group-item");
+                li.appendChild(document.createTextNode(`Port ${res[i]}: Open`));
+                scanResult.appendChild(li);
+            }
+
         }
 
         function startScan() {
             const minPort = document.getElementById("minPort").value;
             const maxPort = document.getElementById("maxPort").value;
-            xhttp.open("GET", `/scan?minPort=${minPort}&maxPort=${maxPort}`, true);
+            xhttp.open("GET", `/scan?minPort=${minPort}&maxPort=${maxPort}`, false);
             xhttp.send()
         }
 
