@@ -22,7 +22,7 @@
                     <input class="form-control m-2" type="number" id="maxPort" placeholder="Maximum Port" min="0"
                            max="65535" required>
                 </div>
-                <button type="submit" class="btn btn-outline-success m-2 ">Start Scan</button>
+                <button type="submit" class="btn btn-outline-success m-2 " id="btnScan">Start Scan</button>
             </div>
         </form>
 
@@ -36,19 +36,24 @@
     <script type="text/javascript">
         $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
         const xhttp = new XMLHttpRequest();
+        const form = document.getElementById('scanForm');
+        const btnScan = document.getElementById('btnScan');
+        const scanResult = document.getElementById('scanResult');
 
         xhttp.onreadystatechange = function () {
-            const res = JSON.parse(this.responseText);
-            const scanResult = document.getElementById('scanResult');
+            if (this.readyState === 4 && this.status === 200) {
+                const res = JSON.parse(this.responseText);
 
-            for (var i = 0;
-                 i < res.length;
-                 i++
-            ) {
-                const li = document.createElement('li');
-                li.classList.add("list-group-item");
-                li.appendChild(document.createTextNode(`Port ${res[i]}: Open`));
-                scanResult.appendChild(li);
+                for (var i = 0;
+                     i < res.length;
+                     i++
+                ) {
+                    const li = document.createElement('li');
+                    li.classList.add("list-group-item");
+                    li.appendChild(document.createTextNode(`Port ${res[i]}: Open`));
+                    scanResult.appendChild(li);
+                }
+                btnScan.innerHTML = "Start Scan";
             }
 
         }
@@ -56,13 +61,18 @@
         function startScan() {
             const minPort = document.getElementById("minPort").value;
             const maxPort = document.getElementById("maxPort").value;
-            xhttp.open("GET", `/scan?minPort=${minPort}&maxPort=${maxPort}`, false);
+            xhttp.open("GET", `/scan?minPort=${minPort}&maxPort=${maxPort}`, true);
             xhttp.send()
         }
 
-        const form = document.getElementById('scanForm');
-        form.addEventListener('submit', function (e) {
+
+        form && form.addEventListener('submit', function (e) {
             e.preventDefault();
+            scanResult.innerHTML = null;
+            btnScan.innerHTML = `
+                <div class="spinner-border" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>`
             startScan();
         })
     </script>
