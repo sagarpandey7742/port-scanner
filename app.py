@@ -41,6 +41,21 @@ def sniff():
     packets = sniff_port(port, count=5, timeout=1)
     return jsonify(list(packets))
 
+//ipgeolocation
+@app.route('/getloc', methods=['GET'])
+def getloc():
+    ip= request.args.get('ip')
+	if not ip:
+		return jsonify({"Error": "Invalid"})
+	r= requests.get('https://api.ipgeolocation.io/ipgeo?apiKey=2044304df1904a19b9b1119e2476b4b7&', +ip)
+return jsonify(r)
+	
+
+  
+	
+
+
+
 
 if __name__ == '__main__':
     app.run()
