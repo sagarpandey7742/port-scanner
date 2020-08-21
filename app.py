@@ -48,7 +48,7 @@ def getloc():
 	if not ip:
 		return jsonify({"Error": "Invalid"})
 	r= requests.get('https://api.ipgeolocation.io/ipgeo?apiKey=2044304df1904a19b9b1119e2476b4b7&', +ip)
-return jsonify(r)
+	return jsonify(r)
 	
 
   
