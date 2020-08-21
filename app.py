@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request, jsonify
+import requests
+
 from script import host_up, scan_port, sniff_port
 
 app = Flask(__name__)
@@ -41,20 +43,14 @@ def sniff():
     packets = sniff_port(port, count=5, timeout=1)
     return jsonify(list(packets))
 
-//ipgeolocation
-@app.route('/getloc', methods=['GET'])
-def getloc():
-    ip= request.args.get('ip')
-	if not ip:
-		return jsonify({"Error": "Invalid"})
-	r= requests.get('https://api.ipgeolocation.io/ipgeo?apiKey=2044304df1904a19b9b1119e2476b4b7&', +ip)
-	return jsonify(r)
-	
 
-  
-	
-
-
+@app.route('/getLoc', methods=['GET'])
+def get_loc():
+    ip = request.args.get('ip')
+    if not ip:
+        return jsonify({"Error": "Invalid"})
+    r = requests.get('https://api.ipgeolocation.io/ipgeo?apiKey=2044304df1904a19b9b1119e2476b4b7&ip={}'.format(ip))
+    return r.json()
 
 
 if __name__ == '__main__':
