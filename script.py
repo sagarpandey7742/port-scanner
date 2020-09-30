@@ -1,6 +1,7 @@
 from logging import getLogger, ERROR
 from scapy.all import *
 import sys
+
 from datetime import datetime
 from time import strftime
 from flask import Flask, render_template, request, jsonify
@@ -49,6 +50,7 @@ def scan_port(port, target="127.0.0.1"):
         send(RST_pkt)
         return False
     # RST sent by default
+
 
 
 def sniff_port(port, count, timeout=1):     # Return dest ip
@@ -113,3 +115,4 @@ def sniff_port(port, count, timeout=1):     # Return dest ip
 # except KeyboardInterrupt:
 #     print("\n[*] Shutdown requested.")
 #     exit(1)
+
