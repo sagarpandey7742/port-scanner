@@ -3,6 +3,8 @@ from scapy.all import *
 import sys
 from datetime import datetime
 from time import strftime
+from flask import Flask, render_template, request, jsonify
+
 
 getLogger("scapy.runtime").setLevel(ERROR)
 
@@ -49,8 +51,30 @@ def scan_port(port, target="127.0.0.1"):
     # RST sent by default
 
 
-def sniff_port(port, count, timeout=1):
-    return sniff(filter='port {}'.format(port), count=count, timeout=timeout)
+def sniff_port(port, count, timeout=1):     # Return dest ip
+    
+    def print_summary(pkt):
+        if IP in pkt:
+            ip_src=pkt[IP].src
+            ip_dst=pkt[IP].dst
+        if TCP in pkt:
+            tcp_sport=pkt[TCP].sport
+            tcp_dport=pkt[TCP].dport
+
+            print(" IP src " + str(ip_src) + " TCP sport " + str(tcp_sport)) 
+            print(" IP dst " + str(ip_dst) + " TCP dport " + str(tcp_dport))
+
+            return [ip_src,tcp_sport, ip_dst, tcp_dport]
+        return []
+
+    lst = sniff(filter='port {}'.format(port), count=count, timeout=timeout, prn=print_summary)
+
+    if not lst:
+        return jsonify({"Error": "Invalid"})
+    else:
+        return jsonify(lst)
+
+    # return sniff(filter='port {}'.format(port), count=count, timeout=timeout)
 
 #
 # try:
