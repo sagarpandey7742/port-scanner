@@ -69,7 +69,7 @@ def sniff_port(port, count, timeout=1):     # Return dest ip
 
     lst = sniff(filter='port {}'.format(port), count=count, timeout=timeout, prn=print_summary)
 
-    if not lst:
+    if lst != []:
         return jsonify({"Error": "Invalid"})
     else:
         return jsonify(lst)
